@@ -17,10 +17,10 @@ use Illuminate\Foundation\Bus\PendingDispatch;
 use Illuminate\Foundation\Mix;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Queue\CallQueuedClosure;
+use Illuminate\Routing\Router;
 use Illuminate\Support\Facades\Date;
 use Illuminate\Support\HtmlString;
 use Symfony\Component\HttpFoundation\Response;
-use App\Models\Language;
 
 if (! function_exists('abort')) {
     /**
@@ -602,6 +602,35 @@ if (! function_exists('policy')) {
     }
 }
 
+if (! function_exists('precognitive')) {
+    /**
+     * Handle a Precognition controller hook.
+     *
+     * @param  null|callable  $callable
+     * @return mixed
+     */
+    function precognitive($callable = null)
+    {
+        $callable ??= function () {
+            //
+        };
+
+        $payload = $callable(function ($default, $precognition = null) {
+            $response = request()->isPrecognitive()
+                ? ($precognition ?? $default)
+                : $default;
+
+            abort(Router::toResponse(request(), value($response)));
+        });
+
+        if (request()->isPrecognitive()) {
+            abort(204);
+        }
+
+        return $payload;
+    }
+}
+
 if (! function_exists('public_path')) {
     /**
      * Get the path to the public folder.
@@ -682,7 +711,7 @@ if (! function_exists('rescue')) {
      *
      * @param  callable  $callback
      * @param  mixed  $rescue
-     * @param  bool  $report
+     * @param  bool|callable  $report
      * @return mixed
      */
     function rescue(callable $callback, $rescue = null, $report = true)
@@ -690,7 +719,7 @@ if (! function_exists('rescue')) {
         try {
             return $callback();
         } catch (Throwable $e) {
-            if ($report) {
+            if (value($report, $e)) {
                 report($e);
             }
 
@@ -901,44 +930,6 @@ if (! function_exists('__')) {
      */
     function __($key = null, $replace = [], $locale = null)
     {
-        if (session()->get('local') != null) {
-            $language = Language::where('iso_code', session()->get('local'))->first();
-        } else {
-            $language = Language::where('default_language', 'on')->first();
-        }
-
-        $main = $key;
-        if ($language) {
-            $path = resource_path()."/lang/$language->iso_code.json";
-            if(!file_exists($path)){
-                fopen(resource_path()."/lang/$language->iso_code.json", "w");
-                file_put_contents(resource_path()."/lang/$language->iso_code.json", '{}');
-            }
-            $website = json_decode(file_get_contents(resource_path('lang/' . $language->iso_code . '.json')), true);
-
-            $key = preg_replace('/\s+/S', " ", $key);
-            $strLowerKey = strtolower($key);
-            $key = ucwords(trim($strLowerKey));
-
-
-            if (array_key_exists($key, $website)) {
-                if (session()->get('local') == null) {
-                    return $key;
-                }
-
-                return $website[$key];
-            }
-
-            $website[$key] = $key;
-            file_put_contents(resource_path('lang/' . $language->iso_code . '.json'), json_encode($website));
-            if (session()->get('local') == null) {
-                return $key;
-            }
-//            dd($main,$strLowerKey, $key, $website[$key]);
-//
-//            return $website[$key];
-        }
-
         if (is_null($key)) {
             return $key;
         }
