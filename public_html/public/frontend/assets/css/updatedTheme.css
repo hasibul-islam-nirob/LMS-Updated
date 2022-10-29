@@ -1,0 +1,88 @@
+#mainNav {
+    background: #f1f1f5 !important;
+}
+#mainNav.sticky {
+    background: #f1f1f5 !important;
+}
+#mainNav .navbar-nav .nav-item .nav-link {
+    color: var(--white-color);
+}
+.menu-color-dark{
+    color: #040453FF !important;
+    padding: 0.75em 15px;
+}
+#navBtn{
+    color: #f2f2f8 !important;
+    background: #040453FF !important;
+}
+.topLogo, .footerLogo{
+    width: 200px;
+    height: 60px;
+}
+.gradient-bg, .footer-gradient-bg{
+    background: #1B2845;
+}
+.gradient-bg-light{
+    background: #eeeef1;
+}
+.section-overlay-light {
+    background: #eeeef1;
+    height: 100%;
+    width: 100%;
+}
+.loginPageLogo{
+    width: 100px;
+    height: 60px;
+}
+.loginDash {
+    color: var(--white-color);
+}
+
+
+
+.sign-up-page {
+    overflow-x: hidden;
+}
+.sign-up-page .row .col-md-5, .sign-up-page .row .col-md-7 {
+    padding: 0;
+}
+.sign-up-left-content {
+    background: #bacacb !important;
+    background-size: cover;
+    padding: 30px 100px;
+}
+.sign-up-bottom-img {
+    margin-top: 130px;
+}
+.sign-up-bottom-img img {
+    height: auto;
+    width: 561px;
+}
+.sign-up-left-content, .sign-up-right-content {
+    min-height: 100vh;
+    height: 100%;
+}
+.sign-up-right-content {
+    align-items: center;
+    display: flex;
+}
+.sign-up-right-content form {
+    width: 479px;
+    margin: 0 auto;
+}
+.sign-up-left-content p {
+    font-size: 26px;
+    line-height: 137%;
+    color: rgba(2, 12, 40, 0.86);
+    margin-top: 100px;
+    padding-right: 115px;
+}
+
+.footer-gradient-bg{
+    background: #f1f1f5 !important;
+}
+.footer-section-overlay{
+    background: rgba(1, 10, 29, 0.8) !important;
+    height: 100%;
+    width: 100%;
+}
